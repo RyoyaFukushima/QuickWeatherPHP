@@ -2,17 +2,14 @@
 // 天気ごとの画像切り替えがエラー起きるので修正
 require 'openWeatherAPI.php';
 header('X-FRAME-OPTION:DENY'); // クリックジャッキング対策
+//header('Content-Type: image/png');
+// $sunny = imagecreatefrompng("img/sunny.png");
 
 function h($str){
     return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
 }
-
-/*$sunny = file_get_contents("img/sunny.png");
-$cloud = file_get_contents('img/cloud.png');
-$rain = file_get_contents('img/rain.png');
-$snow = file_get_contents('img/snow.png');
-// 画像指定をしないとデータ（文字列がそのまま)表示される
-header('Content-type: image/png');*/
+// コンテンツ形式の指定
+//header('Content-type: image/png');
 
 // 0:タイトル画面, 1:天気画面
 $pageflag = 0;
@@ -52,24 +49,26 @@ if(isset($_POST['back'])){
     <?php 
     $info = weatherinfo($_POST['location']);
     $message = makemessage($info, $_POST['location']);
-    //$weather = weatherStatus($info);
-    // 天気ごとに画像切り替え
-    /*switch($weather){
+    $weather = weatherStatus($info);
+    
+    switch($weather){
         case 'Clear':
-            echo $sunny;
-        break;
+            //　これと同じことができるメソッドが欲しい
+            echo '<img src="img/sunny.png">';
+            break;
         case 'Clouds':
-            echo $cloud;
-        break;
+            echo '<img src="img/cloud.png">';
+            break;
         case 'Rain':
-            echo $rain;
-        break;
+            echo '<img src="img/rain.png">';
+            break;
         case 'Snow':
-            echo $snow;
-        break;
-    }*/
-    echo h($message);
+            echo '<img src="img/snow.png">';
+            break;
+      } 
     ?>
+ 
+    <h2><?php echo h($message); ?></h2>
     <br>
     <form method="POST" action="app.php">
         <input type="submit" name="back"value="戻る。">
